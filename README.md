@@ -23,6 +23,9 @@ code, scripts and Home Assistant examples. Read
 > **Status honesty.** Every item below is marked as car-validated,
 > offline-validated or WIP. The owner's car is a single vehicle; your
 > firmware, trim, APs and network will differ.
+>
+> **Security.** Do not post secrets, logs or personal data in issues. Report
+> security problems privately as described in [`SECURITY.md`](SECURITY.md).
 
 ---
 
