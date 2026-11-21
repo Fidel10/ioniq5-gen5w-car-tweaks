@@ -1,5 +1,8 @@
 # IONIQ 5 Gen5W — car-specific WiFi, battery, climate and Home Assistant tweaks
 
+[![License: AGPL-3.0-only](https://img.shields.io/badge/License-AGPL--3.0--only-blue.svg)](LICENSE)
+[![Upstream: SCOURGE](https://img.shields.io/badge/upstream-nickles--lee%2Fhkg__SCOURGE-informational.svg)](https://github.com/nickles-lee/hkg_SCOURGE)
+
 A **curated, car-specific derivative** of
 [SCOURGE](https://github.com/nickles-lee/hkg_SCOURGE): it documents and
 shares the work done on one 2021 IONIQ 5 Gen5W head unit (European `260128`
