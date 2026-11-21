@@ -1,0 +1,42 @@
+SPDX-FileCopyrightText: 2026 The SCOURGE Project contributors
+SPDX-License-Identifier: AGPL-3.0-only
+
+# Firmware/OEM material (never commit)
+input/
+work/
+out/
+.export/
+third_party/
+payload/rootfs/
+
+# Local secrets and configuration
+config/key.local
+config/reviewer.local
+*.local
+*.secret
+*.token
+.env
+
+# Firmware and image artefacts
+*.img
+*.bin
+*.lz4
+*.astc
+*.dump
+*.core
+
+# Temporary and captured data
+tmp/
+uploads/
+*.log
+__pycache__/
+*.pyc
+
+# Built payloads and on-car run results (may contain SSIDs/IPs)
+scripts/results/
+scripts/battery_daemon_hook
+scripts/wifi-ui/wifi_daemon
+scripts/wifi-ui/WifiPage.qml
+scripts/wifi-ui/wifi_daemon.*
+reference/daemon/wifi_daemon
+reference/daemon/battery_daemon

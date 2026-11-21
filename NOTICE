@@ -1,0 +1,48 @@
+SPDX-FileCopyrightText: 2026 The SCOURGE Project contributors
+SPDX-License-Identifier: AGPL-3.0-only
+
+SCOURGE — car-specific work notice
+==================================
+
+This repository contains car-specific changes, documentation, reference
+code and scripts built on:
+
+  SCOURGE — run your own software on Linux-based Gen5W head units
+  Copyright (C) 2026 The SCOURGE Project contributors
+  https://github.com/nickles-lee/hkg_SCOURGE
+  Licensed under AGPL-3.0-only (see LICENSE)
+
+The upstream project and its contributors made the head-unit tooling,
+packages, runbooks and tests possible. This repository is a selective,
+car-specific derivative: it is not a full copy of the upstream project and
+does not redistribute firmware images, OEM binaries, OEM-derived artifacts,
+raw diagnostic exports, personal data or secrets. (The upstream product
+default account `car`/`electric` is a documented factory default, not a
+secret; change it on your unit.)
+
+Prior art and related research:
+
+  IONIQ 5 (LG Gen5W) infotainment research
+  https://github.com/NecktiedHummingbird/ioniq-5-Reverse-Engineering
+
+That project's QEMU/VM and security research was used as prior art,
+especially for Android Auto and micom/Bluetooth findings. Its public release
+explicitly excludes raw diagnostic exports and OEM material; none of that is
+included here either.
+
+All vehicle work described here was performed on the owner's own car, parked
+and off-road, with backups and rollback. Nothing here is a jailbreak guide,
+a firmware update procedure, or a claim that a method works on another
+vehicle.
+
+The files in reference/qml and reference/daemon are first-party SCOURGE
+code modified for this car, sanitised (owner IPs, SSIDs, BSSIDs, entity IDs
+and webhooks replaced with placeholders). Files under reference/systemd are
+unit-file references. No stock/OEM QML file (for example the home-screen
+Advanced.qml) is redistributed; add-climate-tile.py patches your own copy.
+
+Licence: AGPL-3.0-only. The upstream `LICENSE` carries the usual
+"either version 3 or any later version" grant; this derivative is
+distributed under version 3 only (as the SPDX headers say), and the upstream
+code remains available from upstream under its original terms. Keep this
+notice and the upstream attribution when redistributing.

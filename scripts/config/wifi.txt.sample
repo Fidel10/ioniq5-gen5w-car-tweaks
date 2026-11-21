@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2026 The SCOURGE Project contributors
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# USB import format for the WiFi app (replace the placeholders).
+# The daemon applies the static address itself; there is no DHCP client on
+# the head unit.
+ssid=<YOUR_SSID>
+psk=<YOUR_PSK>
+ssh=1
+ssh_port=2222

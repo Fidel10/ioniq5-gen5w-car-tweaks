@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: 2026 The SCOURGE Project contributors
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# Two Home Assistant automations used by the car's Charge Port button hook.
+# The battery daemon POSTs {"state":"open"} or {"state":"closed"} to the
+# webhook URLs configured in /rw_data/battery/door_hook.conf.
+#
+# Import as a list of automations (automations.yaml) or split into two YAML
+# files.  Replace switch.your_plug with your actual entity.
+#
+# IMPORTANT: replace <OPEN_WEBHOOK_ID>/<CLOSE_WEBHOOK_ID> with long random
+# values of your own. Webhook IDs are the only secret protecting the car's
+# hook; predictable IDs (like "charge_door_open") are guessable.
+#
+# HA 2026.x may rewrite trigger/action to triggers/actions on save; the
+# legacy keys below are the ones tested through the REST API.
+
+- id: charge_door_open
+  alias: Car - charge door opens -> plug on
+  description: Charge Port button -> turn on the car-charging socket
+  trigger:
+    - platform: webhook
+      webhook_id: <OPEN_WEBHOOK_ID>
+      allowed_methods:
+        - POST
+  condition: []
+  action:
+    - service: switch.turn_on
+      target:
+        entity_id: switch.your_plug
+  mode: single
+
+- id: charge_door_close
+  alias: Car - charge door closes -> plug off
+  description: Charge Port button -> turn off the car-charging socket
+  trigger:
+    - platform: webhook
+      webhook_id: <CLOSE_WEBHOOK_ID>
+      allowed_methods:
+        - POST
+  condition: []
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.your_plug
+  mode: single
