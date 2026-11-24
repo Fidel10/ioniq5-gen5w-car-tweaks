@@ -54,6 +54,7 @@ code, scripts and Home Assistant examples. Read
   - `scripts/install-wifi-page.sh`, `scripts/install-battery-page.sh`
   - `scripts/add-climate-tile.py`
   - `scripts/install-door-hook.sh`
+  - `scripts/rw-data-inventory.sh` (read-only disk inventory)
   - `scripts/home-assistant/charge-door.yaml`
   - `scripts/config/wifi.txt.sample`
 

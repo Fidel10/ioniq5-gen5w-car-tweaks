@@ -40,3 +40,7 @@ scripts/wifi-ui/WifiPage.qml
 scripts/wifi-ui/wifi_daemon.*
 reference/daemon/wifi_daemon
 reference/daemon/battery_daemon
+
+# Local inventory reports (may contain private paths)
+*-report.txt
+rw-data-report.txt

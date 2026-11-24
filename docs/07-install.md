@@ -192,6 +192,40 @@ Keep at least:
 UI restarts do not drop WiFi; daemon restarts do. Always keep an SSH/pen
 path back in, and never test while driving.
 
+## Disk inventory and log hygiene
+
+`/rw_data` is a 1.2 GB partition shared with navigation data. Old rollback
+copies, archives copied back to it, core files and uncapped logs can fill
+it. (The daemons write USB dumps to the stick under `/media` or `/run/media`,
+not to `/rw_data`.) A full partition breaks status writes, dumps and
+updates.
+
+The logs of the reference daemons are capped at 1 MiB (truncated in place).
+To see what is actually using the space, run the **read-only** inventory on
+the car, as root (`car` is uid 0 on this firmware; permission errors are
+suppressed, so another user would under-report):
+
+```sh
+ssh -p 2222 car@<CAR_IP> 'sh -s' < scripts/rw-data-inventory.sh \
+    > /tmp/rw-data-report.txt
+```
+
+It never deletes or modifies anything on the car (`--out` only truncates
+the local report). It prints filesystem/inode usage,
+the largest entries and files, and groups logs, rollback copies
+(`*.before-*`), other leftovers, archives, firmware payloads, cores, QML
+caches, navigation data and protected runtime files, with a
+review/keep/do-not-delete summary. Keep the report local: it can contain
+private filenames and SSIDs.
+
+Delete only explicit paths, one at a time, with the car parked and a copy on
+a pen of anything you still need. Safe candidates are **older duplicates**
+of `*.before-*`, plus other leftovers, cores, QML caches, completed archives and
+oversized logs. Keep the newest rollback copy of each daemon, page and
+config; keep `/rw_data/app_data`, daemons, `bin/` helpers and SSH keys. A
+running writer keeps its log descriptor open, so `rm` does not free a log
+until restart — use `: > file` to truncate it in place instead.
+
 ## Safety and scope
 
 - Own hardware only, parked, off-road.
