@@ -1,8 +1,8 @@
 # Slow UI: measure first, then change one thing
 
-Status: **method + offline-validated script**. There are no car-validated
-performance numbers in this repository yet; treat every cause below as a
-hypothesis to confirm on your own car.
+Status: **script car-validated on one vehicle**; the numbers it produces are
+a single snapshot, not a benchmark. Treat every cause below as a hypothesis
+to confirm on your own car.
 
 The head unit is a small x86-64 box running the OEM Qt/QML home screen next
 to our daemons. "Sometimes slow" can be CPU contention, memory pressure,
@@ -30,7 +30,7 @@ It never kills or restarts anything. It records:
 | System / Memory | load average, CPUs, available RAM, swap, dirty pages |
 | Pressure (PSI) | whether tasks wait on CPU, IO or memory (if available) |
 | CPU frequency / Thermal | governor, current/max frequency (kHz), zone temperatures (millidegrees C) |
-| CPU windows | CPU time deltas over two 2 s windows, so it shows current load, not `ps` lifetime averages (one core = 100; can exceed 100 on multicore) |
+| CPU windows | CPU time deltas over two 2 s windows, so it shows current load, not `ps` lifetime averages (one core = 100; can exceed 100 on multicore). Per-process CPU comes from `/proc/<pid>/stat` (the kernel's thread-group total); each window's busy/idle total comes from `/proc/stat`, so processes exiting between samples cannot skew it |
 | Top memory | processes by RSS, with their command line |
 | UI/QML processes | the home screen, Qt/QML helpers, compositor |
 | QML caches | size and number of `*.qmlc` files |

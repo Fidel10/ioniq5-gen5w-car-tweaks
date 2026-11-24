@@ -51,7 +51,9 @@ esac
 section() { printf '\n=== %s ===\n' "$*"; }
 have() { command -v "$1" >/dev/null 2>&1; }
 
-# One line per process: "pid utime+stime" (jiffies).
+# One line per process: "pid utime+stime" from /proc/PID/stat.
+# The kernel reports thread-group totals there; /proc/PID/task/*/stat would be
+# per-thread and non-monotonic when a worker exits inside a sampling window.
 cpu_sample() {
     awk '
         {
@@ -66,17 +68,42 @@ cpu_sample() {
     ' /proc/[0-9]*/stat 2>/dev/null
 }
 
-cpu_window() { # snapshot1, snapshot2, label
+# Machine totals from /proc/stat, monotonic across process exits.
+# Fields 2-9 are user..steal; guest/guest_nice (10-11) are already in
+# user/nice and would inflate the total on a KVM host.
+cpu_stat() {
+    awk '/^cpu /{s = 0; for (i = 2; i <= 9 && i <= NF; i++) s += $i; print s, $5 + $6; exit}' \
+        /proc/stat 2>/dev/null
+}
+cpu_ok() { case "$1$2" in ''|*[!0-9]*) return 1 ;; esac; }
+
+cpu_window() { # snapshot1, snapshot2, total1, total2, idle1, idle2, label
     s1=$1
     s2=$2
-    label=$3
+    t1=$3
+    t2=$4
+    i1=$5
+    i2=$6
+    label=$7
+    dt=$((t2 - t1))
+    di=$((i2 - i1))
+    [ "$di" -gt "$dt" ] && di=$dt
+    [ "$di" -lt 0 ] && di=0
+    busy=$((dt - di))
     printf -- '-- window %s\n' "$label"
+    if [ "$dt" -gt 0 ]; then
+        printf 'total: %s jiffies, busy %s (%s%% of %s CPUs, %s%% idle)\n' \
+            "$dt" "$busy" "$((busy * 100 / dt))" "$CPUS" \
+            "$((di * 100 / dt))"
+    fi
     printf '%-8s %-7s %-10s %s\n' 'jiffies' '%CPU' 'PID' 'command'
+    # Busybox awk on this firmware corrupts the heap with -v, so the delta
+    # is computed here and the percentage in the shell below.
     {
         printf '%s\n' "$s1"
         echo '=='
         printf '%s\n' "$s2"
-    } | awk -v hz="$HZ" -v iv=2 '
+    } | awk '
         $0 == "==" { second = 1; next }
         NF == 2 {
             if (second) b[$1] = $2
@@ -84,12 +111,13 @@ cpu_window() { # snapshot1, snapshot2, label
         }
         END {
             for (p in b)
-                if (p in a) {
+                if (a[p] != "") {
                     d = b[p] - a[p]
-                    if (d > 0) print d, p, int(d * 100 / (hz * iv))
+                    if (d > 0) print d, p
                 }
         }
-    ' | sort -rn | head -15 | while read -r d p pct; do
+    ' | sort -rn | head -15 | while read -r d p; do
+        pct=$((d * 100 / (HZ * 2)))
         cmd=$( { tr '\0' ' ' < "/proc/$p/cmdline"; } 2>/dev/null )
         cmd=${cmd% }
         [ -n "$cmd" ] || cmd=$( { tr '\n' ' ' < "/proc/$p/comm"; } 2>/dev/null )
@@ -124,6 +152,12 @@ HZ=$(getconf CLK_TCK 2>/dev/null || echo 100)
 case "$HZ" in
     ''|*[!0-9]*) HZ=100 ;;
     0) HZ=100 ;;
+esac
+CPUS=$(getconf _NPROCESSORS_ONLN 2>/dev/null ||
+       grep -c '^processor' /proc/cpuinfo 2>/dev/null || echo 1)
+case "$CPUS" in
+    ''|*[!0-9]*) CPUS=1 ;;
+    0) CPUS=1 ;;
 esac
 
 printf 'Read-only system snapshot\n'
@@ -172,16 +206,24 @@ section "CPU windows (deltas from /proc, two 2 s windows)"
 if ! have sleep; then
     echo 'sleep unavailable; CPU windows skipped'
 else
-    S1=$(cpu_sample)
+    S1=$(cpu_sample); C1=$(cpu_stat)
     sleep 2
-    S2=$(cpu_sample)
+    S2=$(cpu_sample); C2=$(cpu_stat)
     sleep 2
-    S3=$(cpu_sample)
-    if [ -z "$S1" ] || [ -z "$S2" ]; then
-        echo '/proc/<pid>/stat unreadable; CPU windows unavailable'
+    S3=$(cpu_sample); C3=$(cpu_stat)
+    T1=${C1% *}; I1=${C1#* }
+    T2=${C2% *}; I2=${C2#* }
+    T3=${C3% *}; I3=${C3#* }
+    if [ -z "$S1" ] || [ -z "$S2" ] ||
+       ! cpu_ok "$T1" "$I1" || ! cpu_ok "$T2" "$I2"; then
+        echo '/proc data unreadable; CPU windows unavailable'
     else
-        cpu_window "$S1" "$S2" "1 (2 s)"
-        cpu_window "$S2" "$S3" "2 (2 s)"
+        cpu_window "$S1" "$S2" "$T1" "$T2" "$I1" "$I2" "1 (2 s)"
+        if [ -n "$S3" ] && cpu_ok "$T3" "$I3"; then
+            cpu_window "$S2" "$S3" "$T2" "$T3" "$I2" "$I3" "2 (2 s)"
+        else
+            echo 'second window incomplete; skipped'
+        fi
     fi
 fi
 
