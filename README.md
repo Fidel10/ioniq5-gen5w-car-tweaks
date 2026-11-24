@@ -44,6 +44,7 @@ code, scripts and Home Assistant examples. Read
   - [Android Auto findings: no AA stack in this firmware](docs/06-aa.md)
   - [Install, backup and rollback notes](docs/07-install.md)
   - [Prior art: review of a related Gen5W VM research repository](docs/08-prior-art.md)
+  - [Slow UI: measure processes, memory and QML caches](docs/09-performance.md)
 - **Reference code** (first-party files, sanitised):
   - `reference/qml/` — `WifiPage.qml`, `BatteryPage.qml`, `ClimateTile.qml`,
     `TweaksPage.qml`
@@ -55,6 +56,7 @@ code, scripts and Home Assistant examples. Read
   - `scripts/add-climate-tile.py`
   - `scripts/install-door-hook.sh`
   - `scripts/rw-data-inventory.sh` (read-only disk inventory)
+  - `scripts/system-inventory.sh` (read-only process/UI snapshot)
   - `scripts/home-assistant/charge-door.yaml`
   - `scripts/config/wifi.txt.sample`
 
