@@ -1637,6 +1637,31 @@ static void status_dir(char *out, size_t n)
     out[len] = '\0';
 }
 
+#define LOG_MAX_BYTES (1024 * 1024)
+
+/* The systemd unit appends stderr to daemon.log, so the daemon caps its own
+ * log.  Truncate in place: the unit holds the O_APPEND descriptor and a
+ * rename would leave it writing to the unlinked inode.  /rw_data is a 1.2 GB
+ * partition shared with navigation data. */
+static void log_cap(void)
+{
+    char sd[512];
+    char path[768];
+    struct stat st;
+
+    status_dir(sd, sizeof(sd));
+    snprintf(path, sizeof(path), "%s/daemon.log", sd);
+    if (lstat(path, &st) != 0 || !S_ISREG(st.st_mode) ||
+        st.st_size <= LOG_MAX_BYTES)
+        return;
+    /* O_NOFOLLOW closes the lstat/open race; fstat refuses anything that is
+     * not a regular file.  No O_TRUNC: truncation happens after the check. */
+    int fd = open(path, O_WRONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC);
+    if (fd < 0) return;
+    if (fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) (void)ftruncate(fd, 0);
+    close(fd);
+}
+
 static bool write_atomic_file(const char *path, const char *data, size_t len)
 {
     char tmp[800];
@@ -2710,6 +2735,7 @@ int main(int argc, char **argv)
         tick_chargedoor(now);
 
         if (now - last_status_write > 1000) {
+            log_cap();
             write_status_file();
             last_status_write = now;
         }

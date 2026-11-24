@@ -54,6 +54,10 @@ examples; replace them.
 - keep power save off (`iw dev wlan0 set power_save off`)
 - re-add the firewall rules for SSH, the daemon HTTP port and ICMP on
   every watchdog cycle (OEM rules do not survive reboots)
+- cap `daemon.log`, `wpa_supplicant.log` and `ssh.log` at **1 MiB** each,
+  truncating in place (the systemd unit, wpa_supplicant and dropbear keep
+  their descriptors open; a rename would leak the space on the 1.2 GB
+  `/rw_data` partition)
 
 Reference: `reference/daemon/wifi_daemon.c`, service unit in
 `reference/systemd/wifi-daemon.service`.
@@ -134,6 +138,9 @@ ping -c2 1.1.1.1
 ping -c2 google.com
 tail -40 /rw_data/wifi/daemon.log
 ```
+
+The cap truncates the file in place, so `tail` right after a cap can
+temporarily show nothing; retry once the daemon logs again.
 
 On a host (SSH tunnel to the car's localhost API):
 

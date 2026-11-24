@@ -87,6 +87,9 @@ are the safest source for values the vendor already decodes.
 - sends the preheat and charge-door commands through the micom D-Bus;
 - exposes HTTP/JSON on `127.0.0.1:8088` (`/status`, `/logs`, commands);
 - stores logs/status in `/rw_data/battery/`;
+- caps `daemon.log` at **1 MiB**, truncating in place once per second (the
+  systemd unit holds an `O_APPEND` descriptor; a rename would leave it
+  writing to the unlinked inode and the 1.2 GB `/rw_data` would still fill);
 - runs on the I-CAN interface: this car used `can1`; the reference unit
   shows the argument layout with `can0`, so set `--iface` to your own
   interface name;

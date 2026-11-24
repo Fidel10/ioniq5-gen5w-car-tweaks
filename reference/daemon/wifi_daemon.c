@@ -182,6 +182,24 @@ static char *trim(char *s)
     return s;
 }
 
+#define LOG_MAX_BYTES (1024 * 1024)
+
+/* wpa_supplicant and the systemd unit keep their descriptors across a rename,
+ * so the cap must truncate in place: a rename would leave them writing to an
+ * unlinked inode and the space would not be freed. */
+static void log_cap(const char *path)
+{
+    struct stat st;
+    if (lstat(path, &st) != 0 || !S_ISREG(st.st_mode) ||
+        st.st_size <= LOG_MAX_BYTES) return;
+    /* O_NOFOLLOW closes the lstat/open race; fstat refuses anything that is
+     * not a regular file.  No O_TRUNC: truncation happens after the check. */
+    int fd = open(path, O_WRONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC);
+    if (fd < 0) return;
+    if (fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) (void)ftruncate(fd, 0);
+    close(fd);
+}
+
 static void log_msg(const char *fmt, ...)
 {
     char buf[1024];
@@ -189,6 +207,13 @@ static void log_msg(const char *fmt, ...)
     va_start(ap, fmt);
     vsnprintf(buf, sizeof(buf), fmt, ap);
     va_end(ap);
+
+    /* The systemd unit appends stderr to daemon.log and wpa_supplicant keeps
+     * its own descriptor on wpa_supplicant.log.  Both survive a rename, so
+     * truncate in place: /rw_data is only 1.2 GB and these are its largest
+     * writers. */
+    log_cap(LOG_PATH);
+    log_cap(WPA_LOG);
 
     FILE *f = fopen(LOG_PATH, "a");
     if (f) {
@@ -1130,6 +1155,7 @@ static bool start_wpa_supplicant_args(const char *driver)
      * recreated iface with "conf N/A ctrl_interface N/A" and no socket).
      * No -u: in single-owner mode nothing may attach over D-Bus and call
      * RemoveInterface. */
+    log_cap(WPA_LOG);
     if (driver && *driver)
         sh("nohup /usr/sbin/wpa_supplicant -D%s -iwlan0 -c%s -O/var/run/wpa_supplicant -P%s >>%s 2>&1 &",
            driver, WPA_CONF, WPA_PIDFILE, WPA_LOG);
@@ -2938,6 +2964,12 @@ static void watchdog(void)
     int64_t now = now_ms();
     if (now - g_last_watchdog_ms < 10000) return;
     g_last_watchdog_ms = now;
+
+    /* wpa_supplicant writes its own descriptor; nothing here logs once the
+     * stack is healthy, so the cap must also run on this tick. */
+    log_cap(WPA_LOG);
+    log_cap(LOG_PATH);
+    log_cap(APP_DIR "/ssh.log");
     ensure_firewall();
 
     /* Supplicant startup is decided in ensure_wifi_ready() with a boot
