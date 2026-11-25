@@ -31,6 +31,11 @@ interface (`can0`/`can1`).
 The factory QML models (`AppPHEVModel`, `appClimateModel`, `AppNModeModel`)
 are the safest source for values the vendor already decodes.
 
+![Battery page](images/battery-page.png)
+
+*Battery page on the car: SoC, minimum cell temperature, signed drive/regen
+gauge, charging, heater/V2L and the status footer.*
+
 ## What the page shows
 
 `reference/qml/BatteryPage.qml` (Tweaks → Battery):

@@ -87,6 +87,10 @@ Reference: `reference/daemon/wifi_daemon.c`, service unit in
 
 ### UI
 
+![WiFi page](images/wifi-page.png)
+
+*WiFi summary tab on the car; SSID, IP addresses, the SSH command and the profile avatar are blurred.*
+
 `reference/qml/WifiPage.qml` is a full replacement page:
 
 - Tabs: **WiFi | Redes | Ping | SSH | Log**

@@ -32,6 +32,23 @@ code, scripts and Home Assistant examples. Read
 
 ---
 
+## Screenshots
+
+Captured on the car with `weston-screenshooter` and downscaled to 1280x480.
+Owner SSID, IP addresses, the SSH command and the profile avatar are blurred;
+metadata was stripped. See [`docs/images/README.md`](docs/images/README.md)
+for the capture and redaction method. The renders include the OEM theme and
+icons, which remain the property of their owners.
+
+![WiFi page](docs/images/wifi-page.png)
+
+*WiFi summary tab: SSID, IP addresses and SSH command blurred.*
+
+![Battery page](docs/images/battery-page.png)
+
+*Battery page: SoC, minimum cell temperature, signed drive/regen gauge,
+charging, heater/V2L and the status footer.*
+
 ## What this repository is
 
 - **Documentation** of the problems, diagnosis and fixes:
