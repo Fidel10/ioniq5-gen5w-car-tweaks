@@ -39,8 +39,10 @@ Item {
         return s + unitSuffix()
     }
 
+    // The theme image has no slot size of its own; fill the tile or it draws
+    // at its small intrinsic size in the middle of the component.
     Q_ThemeImage {
-        anchors.centerIn: parent
+        anchors.fill: parent
         themeSource: defineModel.home_bg_icon_n
     }
 

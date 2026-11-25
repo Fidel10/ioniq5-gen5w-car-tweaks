@@ -1,8 +1,9 @@
 # Interior/exterior temperature tile
 
-Status: **car-validated visually** on the owner's car. The tile is a
-first-party QML component; the OEM home-screen file is only patched, not
-redistributed.
+Status: **car-validated visually** on the owner's car; a background-fill
+fix is prepared and pending visual validation (see
+`docs/07-install.md`). The tile is a first-party QML component; the OEM
+home-screen file is only patched, not redistributed.
 
 ## What it shows
 

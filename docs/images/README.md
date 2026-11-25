@@ -9,8 +9,10 @@ Captured on the owner's 2021 IONIQ 5 Gen5W with
 
 Published images: `wifi-page.png`, `battery-page.png`. The Tweaks page and
 the home-tile screenshot were withheld: the review showed a card overflow on
-the Tweaks page and a mis-sized background on the Clima tile. They will be
-added after the layout is fixed and the screens recaptured.
+the Tweaks page and a mis-sized background on the Clima tile. Layout fixes
+for both are prepared in `reference/qml/` and can be installed with
+`scripts/install-ui-fixes.sh`; the images will be added after the fixes are
+validated on the car and the screens recaptured.
 
 The renders include the OEM theme, icons and status bar. They are
 documentation of this work only; the OEM artwork remains the property of its

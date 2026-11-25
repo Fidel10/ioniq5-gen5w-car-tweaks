@@ -192,6 +192,45 @@ Keep at least:
 UI restarts do not drop WiFi; daemon restarts do. Always keep an SSH/pen
 path back in, and never test while driving.
 
+## Prepared layout fixes (Climate tile and Tweaks page)
+
+`scripts/install-ui-fixes.sh` installs two layout fixes prepared after the
+screenshot review:
+
+- `ClimateTile.qml`: the theme background now fills the tile instead of
+  drawing at its small intrinsic size.
+- `TweaksPage.qml`: the Cluster card has room for its wrapped body, the
+  Deep red card moved to the right column and its overlapping subtitle
+  became a compact dynamic status line, and the action/diagnostic rows
+  moved up to fit the viewport.
+
+The page budget is about 600 logical pixels: the content box is 1180x630,
+the lowest text now ends at ~587, and the previous layout clipped the
+message row. Confirm the real usable height on your firmware.
+
+These changes are **prepared, not yet car-validated visually**. The script
+backs up both files to `/rw_data/tweaks/*.before-layoutfix.qml`, clears the
+QML cache, restarts AppHomeScreen through AppLauncher, and rolls back if the
+process does not come back:
+
+```sh
+./scripts/install-ui-fixes.sh car@<CAR_IP> 2222
+```
+
+After the restart, open the home screen and the Tweaks page, take a
+screenshot, and check the Clima background, the Cluster card and the bottom
+action row before keeping the change. To roll back explicitly:
+
+```sh
+./scripts/install-ui-fixes.sh --rollback car@<CAR_IP> 2222
+```
+
+The script keeps the first copies as stock (`*.before-layoutfix.qml`), so
+re-running it does not overwrite the rollback source. Rollback restores the
+files even when AppHomeScreen is down; it restarts the UI only if
+AppLauncher and the session bus are available, otherwise it prints
+`ROLLBACK_FILES_RESTORED_NO_RESTART` and you can restart/reboot manually.
+
 ## Disk inventory and log hygiene
 
 `/rw_data` is a 1.2 GB partition shared with navigation data. Old rollback

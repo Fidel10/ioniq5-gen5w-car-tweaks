@@ -71,7 +71,7 @@ charging, heater/V2L and the status footer.*
   - `scripts/install-wifi-ui.sh`, `scripts/wifi-always-on.sh`
   - `scripts/install-wifi-page.sh`, `scripts/install-battery-page.sh`
   - `scripts/add-climate-tile.py`
-  - `scripts/install-door-hook.sh`
+  - `scripts/install-door-hook.sh`, `scripts/install-ui-fixes.sh`
   - `scripts/rw-data-inventory.sh` (read-only disk inventory)
   - `scripts/system-inventory.sh` (read-only process/UI snapshot)
   - `scripts/home-assistant/charge-door.yaml`
@@ -97,7 +97,7 @@ package layout; it is not a standalone build.
 | Battery page + gauge + instant power | **Car-validated** | negative regen, peak/regen, capacity, charge/V2L, conditioning/winter |
 | Battery daemon + charge-door hook | **Car-validated** | `/chargedoor` tests, hook fired, HA webhooks triggered |
 | Charge Port → HA → plug | **Car-validated** | webhook + automation + physical plug confirmed |
-| Climate tile (INT/EXT) | **Car-validated (visual)** | driver set temp + exterior; no measured cabin sensor |
+| Climate tile (INT/EXT) | **Car-validated (visual); background fix pending** | driver set temp + exterior; no measured cabin sensor |
 | Sensor catalogue | **Car-observed / derived** | names/IDs from the owner's firmware; not every bit layout validated |
 | Android Auto wireless | **Blocked** | this firmware has no AA projection stack; see docs/06 |
 

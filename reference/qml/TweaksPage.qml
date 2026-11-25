@@ -331,7 +331,7 @@ Item {
             x: 0
             y: 78
             width: 570
-            height: 120
+            height: 136
             radius: 14
             color: "#1B1B1B"
             border.color: root.clusterFix ? "#2E7D32" : "#333333"
@@ -358,7 +358,7 @@ Item {
 
             QText {
                 x: 20
-                y: 94
+                y: 110
                 width: 390
                 text: root.clusterFix
                       ? (root.filterActive
@@ -473,13 +473,13 @@ Item {
             }
         }
 
-        // ---- Deep red night mode row ------------------------------------
+        // ---- Deep red night mode row (right column, under OTA) ----------
         Rectangle {
             id: deepRedCard
-            x: 0
-            y: 498
-            width: 570
-            height: 40
+            x: 590
+            y: 378
+            width: 590
+            height: 56
             radius: 10
             color: "#1B1B1B"
             border.color: root.deepRed ? "#8E2424" : "#333333"
@@ -487,21 +487,19 @@ Item {
 
             QText {
                 x: 16
-                y: 4
+                y: 6
                 width: 360
                 text: "Deep red night mode"
                 font.pixelSize: 19
                 textBold: true
                 color: root.deepRed ? "#FF8A80" : "#FFFFFF"
-                verticalAlignment: Text.AlignVCenter
-                height: parent.height - 8
             }
 
             QText {
                 x: 16
-                y: 24
-                width: 360
-                text: root.deepRed ? "On \u00b7 front 128:32:16 \u00b7 cluster level 9"
+                y: 32
+                width: 380
+                text: root.deepRed ? "On \u00b7 deep red filter"
                                   : "Off \u00b7 follows the vehicle filter"
                 font.pixelSize: 13
                 color: root.deepRed ? "#FF8A80" : "#7A7A7A"
@@ -636,7 +634,7 @@ Item {
         Row {
             id: actions
             x: 0
-            y: 542
+            y: 502
             spacing: 8
 
             TweaksButton {
@@ -672,7 +670,7 @@ Item {
         QText {
             id: diag
             x: 0
-            y: 590
+            y: 552
             width: 1180
             text: "Cluster CAN 0x063F \u00b7 Front CRTC " + root.mainCrtc
                   + " \u00b7 projection " + (root.projectionActive ? "active" : "idle")
@@ -688,7 +686,7 @@ Item {
         QText {
             id: message
             x: 0
-            y: 610
+            y: 572
             width: 1180
             text: root.daemonMessage
             font.pixelSize: 15
