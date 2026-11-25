@@ -1,7 +1,8 @@
 #!/bin/sh
 # SPDX-FileCopyrightText: 2026 The SCOURGE Project contributors
 # SPDX-License-Identifier: AGPL-3.0-only
-# Install (or roll back) the prepared ClimateTile/TweaksPage layout fixes.
+# Install (or roll back) the ClimateTile/TweaksPage layout fixes
+# (installed and visually validated on the car on 2026-11-25).
 # Run from the host; the script copies the QML over SSH and restarts
 # AppHomeScreen through AppLauncher.
 #
@@ -10,7 +11,7 @@
 #   ./install-ui-fixes.sh --rollback [car@host] [port]
 #   CAR=car@host PORT=2222 ./install-ui-fixes.sh
 #
-# The QML is prepared, not yet car-validated visually. Backups are
+# Re-check the screens after a reinstall. Backups are
 # /rw_data/tweaks/*.before-layoutfix.qml and are created only once, so the
 # first run preserves the stock files. / is remounted read-write only for
 # the copy; an EXIT/signal trap always tries to remount it read-only again.

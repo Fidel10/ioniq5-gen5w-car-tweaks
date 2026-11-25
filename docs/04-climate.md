@@ -1,9 +1,13 @@
 # Interior/exterior temperature tile
 
-Status: **car-validated visually** on the owner's car; a background-fill
-fix is prepared and pending visual validation (see
-`docs/07-install.md`). The tile is a first-party QML component; the OEM
-home-screen file is only patched, not redistributed.
+![Home tiles](images/home-tiles.png)
+
+*Home screen with the Clima tile: INT (driver set) and EXT (ambient) inside
+the standard tile square.*
+
+Status: **car-validated visually** on the owner's car, including the compact
+tile layout installed on 2026-11-25. The tile is a first-party QML component;
+the OEM home-screen file is only patched, not redistributed.
 
 ## What it shows
 
@@ -59,7 +63,8 @@ a restore from the backup or a head-unit reboot.
 ## Layout notes
 
 - The tile uses the stock `Q_ThemeImage` background (`home_bg_icon_n`).
-- The two values are two columns; the divider is a thin rectangle.
+- INT and EXT are two stacked rows inside the standard icon square;
+  there is no divider.
 - No click action; it is a read-only tile.
 - It can be removed at any time by deleting the three `ClimateTile` blocks
   and the component; keep the `.before-climate-tile` backup.

@@ -35,10 +35,11 @@ code, scripts and Home Assistant examples. Read
 ## Screenshots
 
 Captured on the car with `weston-screenshooter` and downscaled to 1280x480.
-Owner SSID, IP addresses, the SSH command and the profile avatar are blurred;
-metadata was stripped. See [`docs/images/README.md`](docs/images/README.md)
-for the capture and redaction method. The renders include the OEM theme and
-icons, which remain the property of their owners.
+Owner SSID, IP addresses, the SSH command, the timezone setting and the
+profile avatar are blurred; metadata was stripped. See
+[`docs/images/README.md`](docs/images/README.md) for the capture and
+redaction method. The renders include the OEM theme and icons, which remain
+the property of their owners.
 
 ![WiFi page](docs/images/wifi-page.png)
 
@@ -48,6 +49,15 @@ icons, which remain the property of their owners.
 
 *Battery page: SoC, minimum cell temperature, signed drive/regen gauge,
 charging, heater/V2L and the status footer.*
+
+![Tweaks page](docs/images/tweaks-page.png)
+
+*Tweaks page after the layout fixes; the timezone is blurred.*
+
+![Home tiles](docs/images/home-tiles.png)
+
+*Home screen with the Charge Port, Bateria and Clima tiles; Clima shows INT
+(driver set) and EXT (ambient) inside the standard tile square.*
 
 ## What this repository is
 
@@ -97,7 +107,7 @@ package layout; it is not a standalone build.
 | Battery page + gauge + instant power | **Car-validated** | negative regen, peak/regen, capacity, charge/V2L, conditioning/winter |
 | Battery daemon + charge-door hook | **Car-validated** | `/chargedoor` tests, hook fired, HA webhooks triggered |
 | Charge Port → HA → plug | **Car-validated** | webhook + automation + physical plug confirmed |
-| Climate tile (INT/EXT) | **Car-validated (visual); background fix pending** | driver set temp + exterior; no measured cabin sensor |
+| Climate tile (INT/EXT) | **Car-validated (visual)** | driver set temp + exterior; no measured cabin sensor |
 | Sensor catalogue | **Car-observed / derived** | names/IDs from the owner's firmware; not every bit layout validated |
 | Android Auto wireless | **Blocked** | this firmware has no AA projection stack; see docs/06 |
 

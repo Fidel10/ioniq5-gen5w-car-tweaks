@@ -39,64 +39,44 @@ Item {
         return s + unitSuffix()
     }
 
-    // The theme image has no slot size of its own; fill the tile or it draws
-    // at its small intrinsic size in the middle of the component.
+    // Same icon square as the other tiles: the theme image is the ~100x90
+    // background, not a full-slot card. INT/EXT must fit inside it.
     Q_ThemeImage {
-        anchors.fill: parent
+        anchors.centerIn: parent
         themeSource: defineModel.home_bg_icon_n
     }
 
-    Item {
-        x: 0
-        y: 0
-        width: parent.width / 2
-        height: 150
+    Column {
+        anchors.centerIn: parent
+        spacing: 2
 
-        QText {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 60
-            text: "INT"
-            font.pixelSize: 18
-            color: "#9A9A9A"
+        Row {
+            spacing: 6
+            QText {
+                text: "INT"
+                font.pixelSize: 11
+                color: "#9A9A9A"
+            }
+            QText {
+                text: root.intText
+                font.pixelSize: 22
+                textBold: true
+                color: "#FFFFFF"
+            }
         }
-        QText {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 84
-            text: root.intText
-            font.pixelSize: 36
-            textBold: true
-            color: "#FFFFFF"
-        }
-    }
-
-    Rectangle {
-        x: parent.width / 2 - 1
-        y: 70
-        width: 2
-        height: 56
-        color: "#2E2E2E"
-    }
-
-    Item {
-        x: parent.width / 2
-        y: 0
-        width: parent.width / 2
-        height: 150
-
-        QText {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 60
-            text: "EXT"
-            font.pixelSize: 18
-            color: "#9A9A9A"
-        }
-        QText {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 84
-            text: root.extText
-            font.pixelSize: 36
-            textBold: true
-            color: "#FFFFFF"
+        Row {
+            spacing: 6
+            QText {
+                text: "EXT"
+                font.pixelSize: 11
+                color: "#9A9A9A"
+            }
+            QText {
+                text: root.extText
+                font.pixelSize: 22
+                textBold: true
+                color: "#FFFFFF"
+            }
         }
     }
 

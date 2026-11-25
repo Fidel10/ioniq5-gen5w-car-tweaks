@@ -192,13 +192,14 @@ Keep at least:
 UI restarts do not drop WiFi; daemon restarts do. Always keep an SSH/pen
 path back in, and never test while driving.
 
-## Prepared layout fixes (Climate tile and Tweaks page)
+## Layout fixes (Climate tile and Tweaks page)
 
-`scripts/install-ui-fixes.sh` installs two layout fixes prepared after the
-screenshot review:
+`scripts/install-ui-fixes.sh` installs two layout fixes, validated on the car
+on 2026-11-25:
 
-- `ClimateTile.qml`: the theme background now fills the tile instead of
-  drawing at its small intrinsic size.
+- `ClimateTile.qml`: INT and EXT now sit in two compact rows inside the
+  standard icon square, with the Clima label below; the tile no longer
+  draws a small background with the values outside it.
 - `TweaksPage.qml`: the Cluster card has room for its wrapped body, the
   Deep red card moved to the right column and its overlapping subtitle
   became a compact dynamic status line, and the action/diagnostic rows
@@ -208,8 +209,7 @@ The page budget is about 600 logical pixels: the content box is 1180x630,
 the lowest text now ends at ~587, and the previous layout clipped the
 message row. Confirm the real usable height on your firmware.
 
-These changes are **prepared, not yet car-validated visually**. The script
-backs up both files to `/rw_data/tweaks/*.before-layoutfix.qml`, clears the
+The script backs up both files to `/rw_data/tweaks/*.before-layoutfix.qml`, clears the
 QML cache, restarts AppHomeScreen through AppLauncher, and rolls back if the
 process does not come back:
 
@@ -217,9 +217,13 @@ process does not come back:
 ./scripts/install-ui-fixes.sh car@<CAR_IP> 2222
 ```
 
-After the restart, open the home screen and the Tweaks page, take a
-screenshot, and check the Clima background, the Cluster card and the bottom
-action row before keeping the change. To roll back explicitly:
+![Tweaks page](images/tweaks-page.png)
+
+*Tweaks page after the layout fixes; the timezone is blurred.*
+
+After any reinstall, open the home screen and the Tweaks page and check the
+Clima tile, the Cluster card and the bottom action row. To roll back
+explicitly:
 
 ```sh
 ./scripts/install-ui-fixes.sh --rollback car@<CAR_IP> 2222

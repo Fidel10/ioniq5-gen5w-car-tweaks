@@ -350,7 +350,7 @@ Item {
                 x: 20
                 y: 44
                 width: 380
-                text: "Keeps the cluster amber while CarPlay or Android Auto is on, via the vehicle's own blue-light CAN signal."
+                text: "Keeps the cluster amber while CarPlay or Android Auto is on."
                 font.pixelSize: 17
                 color: "#B0B0B0"
                 wrapMode: Text.WordWrap
